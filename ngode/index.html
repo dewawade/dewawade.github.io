@@ -16,6 +16,11 @@
             background-size: cover;
             color: #fff;
         }
+        #header-img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
         #result {
             font-size: 32px;
             font-weight: bold;
@@ -53,6 +58,7 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.8);
             color: #333;
+            width: 200px;
         }
         .animating {
             animation: shake 0.5s ease-in-out;
@@ -64,13 +70,21 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
+        #warning {
+            color: yellow;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <img id="header-img" src="ngode/dewa.png" alt="Lotto Header">
     <h2>Random 4 Numbers Generator</h2>
-    <label for="lottoType">Pilih Tipe Lotto:</label>
+    
+    <label for="lottoType">Pilih Jenis Angka:</label>
     <select id="lottoType" onchange="validateInput()">
-        <option value="">-- Pilih --</option>
+        <option value="">-- Pilih Lotto --</option>
         <option value="sydney">Sydney Lotto</option>
         <option value="hongkong">Hongkong Lotto</option>
     </select>
@@ -78,16 +92,25 @@
     <label for="lottoDate">Pilih Tanggal:</label>
     <input type="date" id="lottoDate" onchange="validateInput()" />
     
+    <div id="warning">Silahkan lengkapi pilih lotto dan isi tanggal sebelum menghasilkan angka!</div>
+    
     <div id="result">Klik tombol untuk menghasilkan angka</div>
     <button id="generateButton" onclick="startAnimation()" disabled>Generate</button>
-
+    
     <script>
         function validateInput() {
             let lottoType = document.getElementById("lottoType").value;
             let lottoDate = document.getElementById("lottoDate").value;
             let generateButton = document.getElementById("generateButton");
+            let warning = document.getElementById("warning");
             
-            generateButton.disabled = !(lottoType && lottoDate);
+            if (lottoType && lottoDate) {
+                generateButton.disabled = false;
+                warning.style.display = "none";
+            } else {
+                generateButton.disabled = true;
+                warning.style.display = "block";
+            }
         }
 
         function startAnimation() {
@@ -102,7 +125,7 @@
                 clearInterval(interval);
                 generateNumbers();
                 resultDiv.classList.remove("animating");
-            }, 2000);
+            }, 3000);
         }
 
         function generateRandomNumbers() {
@@ -110,9 +133,7 @@
         }
 
         function generateNumbers() {
-            let lottoType = document.getElementById("lottoType").value;
-            let maxNumber = lottoType === "sydney" ? 45 : 49;
-            let numbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * maxNumber) + 1);
+            let numbers = Array.from({ length: 4 }, () => Math.floor(Math.random() * 49) + 1);
             document.getElementById("result").innerText = numbers.join(" - ");
         }
     </script>
